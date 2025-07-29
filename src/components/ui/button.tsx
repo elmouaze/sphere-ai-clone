@@ -10,20 +10,23 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        gradient: "bg-gradient-button text-white shadow-button hover:shadow-lg hover:scale-[1.02] transition-all duration-200",
+        pro: "bg-gradient-primary text-white shadow-button hover:shadow-lg hover:scale-[1.02] transition-all duration-300 font-semibold",
+        glass: "bg-white/10 border border-white/20 text-white backdrop-blur-sm hover:bg-white/20 transition-all duration-200",
+        active: "bg-accent text-accent-foreground shadow-sm",
+        sidebar: "w-full justify-start bg-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors duration-200",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        sidebar: "h-10 px-3",
       },
     },
     defaultVariants: {
