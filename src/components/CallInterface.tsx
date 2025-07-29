@@ -127,59 +127,139 @@ const CallInterface = ({ onEndCall, currentModel }: CallInterfaceProps) => {
 
       {/* Circle Visualization */}
       <div className="flex-1 flex items-center justify-center">
-        <div className="relative">
-          {/* Main circle */}
+        <div className="relative w-80 h-80">
+          {/* Animated flowing sphere */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <svg 
+              width="320" 
+              height="320" 
+              viewBox="0 0 320 320" 
+              className="animate-spin"
+              style={{ 
+                animationDuration: isRecording ? '20s' : '40s',
+                animationDirection: 'normal'
+              }}
+            >
+              <defs>
+                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.8" />
+                  <stop offset="50%" stopColor="#EC4899" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#F97316" stopOpacity="0.8" />
+                </linearGradient>
+                <linearGradient id="gradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#EC4899" stopOpacity="0.7" />
+                  <stop offset="50%" stopColor="#F97316" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.7" />
+                </linearGradient>
+              </defs>
+              
+              {/* Flowing curves */}
+              {[...Array(12)].map((_, i) => {
+                const rotation = (i * 30);
+                const scale = 1 + (audioLevel / 100) * 0.3;
+                return (
+                  <g key={i} transform={`rotate(${rotation} 160 160)`}>
+                    <path
+                      d={`M 160 40 Q ${120 + Math.sin(i) * 20} 80, 160 120 Q ${200 + Math.cos(i) * 20} 80, 160 40`}
+                      fill="none"
+                      stroke="url(#gradient1)"
+                      strokeWidth="1.5"
+                      opacity={0.6 + (audioLevel / 300)}
+                      style={{
+                        transform: `scale(${scale})`,
+                        transformOrigin: '160px 160px',
+                        transition: 'transform 0.1s ease-out'
+                      }}
+                    />
+                  </g>
+                );
+              })}
+              
+              {/* Inner flowing lines */}
+              {[...Array(8)].map((_, i) => {
+                const rotation = (i * 45) + 22.5;
+                const scale = 1 + (audioLevel / 150) * 0.2;
+                return (
+                  <g key={`inner-${i}`} transform={`rotate(${rotation} 160 160)`}>
+                    <path
+                      d={`M 160 80 Q ${140 + Math.cos(i) * 15} 110, 160 140 Q ${180 + Math.sin(i) * 15} 110, 160 80`}
+                      fill="none"
+                      stroke="url(#gradient2)"
+                      strokeWidth="1"
+                      opacity={0.4 + (audioLevel / 400)}
+                      style={{
+                        transform: `scale(${scale})`,
+                        transformOrigin: '160px 160px',
+                        transition: 'transform 0.15s ease-out'
+                      }}
+                    />
+                  </g>
+                );
+              })}
+            </svg>
+            
+            {/* Counter-rotating outer ring */}
+            <svg 
+              width="320" 
+              height="320" 
+              viewBox="0 0 320 320" 
+              className="absolute animate-spin"
+              style={{ 
+                animationDuration: isRecording ? '30s' : '60s',
+                animationDirection: 'reverse'
+              }}
+            >
+              {[...Array(6)].map((_, i) => {
+                const rotation = (i * 60);
+                return (
+                  <g key={`outer-${i}`} transform={`rotate(${rotation} 160 160)`}>
+                    <path
+                      d={`M 160 20 Q ${100 + Math.sin(i * 2) * 30} 100, 160 180 Q ${220 + Math.cos(i * 2) * 30} 100, 160 20`}
+                      fill="none"
+                      stroke="url(#gradient1)"
+                      strokeWidth="0.5"
+                      opacity={0.3 + (audioLevel / 500)}
+                    />
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+          
+          {/* Center core */}
           <div 
-            className="w-64 h-64 rounded-full border-2 border-white/30 flex items-center justify-center relative overflow-hidden"
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20"
             style={{
-              background: `radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)`,
-              boxShadow: '0 0 60px rgba(255,255,255,0.1), inset 0 0 60px rgba(255,255,255,0.05)'
+              background: `radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 70%, transparent 100%)`,
+              boxShadow: '0 0 30px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(255,255,255,0.1)',
+              transform: `translate(-50%, -50%) scale(${1 + audioLevel / 400})`,
+              transition: 'transform 0.1s ease-out'
             }}
           >
-            {/* Animated rings based on audio level */}
-            <div 
-              className="absolute inset-0 rounded-full border border-white/20 animate-pulse"
-              style={{
-                transform: `scale(${1 + audioLevel / 200})`,
-                transition: 'transform 0.1s ease-out'
-              }}
-            />
-            <div 
-              className="absolute inset-4 rounded-full border border-white/15 animate-pulse"
-              style={{
-                transform: `scale(${1 + audioLevel / 300})`,
-                transition: 'transform 0.15s ease-out',
-                animationDelay: '0.1s'
-              }}
-            />
-            <div 
-              className="absolute inset-8 rounded-full border border-white/10 animate-pulse"
-              style={{
-                transform: `scale(${1 + audioLevel / 400})`,
-                transition: 'transform 0.2s ease-out',
-                animationDelay: '0.2s'
-              }}
-            />
-            
-            {/* Center bot icon */}
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-              <Bot className="w-8 h-8 text-white" />
-            </div>
+            <Bot className="w-10 h-10 text-white" />
           </div>
 
-          {/* Floating particles */}
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-white/40 rounded-full animate-pulse"
-              style={{
-                top: `${Math.sin((i * Math.PI) / 3) * 160 + 50}%`,
-                left: `${Math.cos((i * Math.PI) / 3) * 160 + 50}%`,
-                animationDelay: `${i * 0.2}s`,
-                animationDuration: '2s'
-              }}
-            />
-          ))}
+          {/* Floating energy particles */}
+          {[...Array(8)].map((_, i) => {
+            const angle = (i * 45) * (Math.PI / 180);
+            const radius = 140 + Math.sin(Date.now() / 1000 + i) * 20;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            
+            return (
+              <div
+                key={`particle-${i}`}
+                className="absolute w-1 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
+                style={{
+                  left: `calc(50% + ${x}px)`,
+                  top: `calc(50% + ${y}px)`,
+                  transform: 'translate(-50%, -50%)',
+                  opacity: 0.6 + Math.sin(Date.now() / 500 + i * 0.5) * 0.4,
+                  animationDelay: `${i * 0.2}s`
+                }}
+              />
+            );
+          })}
         </div>
       </div>
 
