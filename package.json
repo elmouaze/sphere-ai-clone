@@ -8,7 +8,10 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend": "/workspaces/sphere-ai-clone/.venv/bin/python backend/app.py",
+    "backend:install": "cd backend && pip install -r requirements.txt",
+    "dev:full": "concurrently \"npm run backend\" \"npm run dev\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -48,6 +51,7 @@
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
+    "ogl": "^1.0.11",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
@@ -69,6 +73,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.2.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",

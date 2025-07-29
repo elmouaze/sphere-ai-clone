@@ -1,6 +1,6 @@
 import Sidebar from "@/components/Sidebar";
 import TopNavigation from "@/components/TopNavigation";
-import ChatPanel from "@/components/ChatPanel";
+import MainInterface from "@/components/MainInterface";
 
 const Index = () => {
   return (
@@ -11,7 +11,7 @@ const Index = () => {
       {/* Main content area */}
       <div className="flex-1 flex flex-col">
         <TopNavigation />
-        <ChatPanel />
+        <MainInterface />
       </div>
     </div>
   );
