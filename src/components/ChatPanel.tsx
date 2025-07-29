@@ -5,14 +5,32 @@ import {
   Edit, 
   MoreHorizontal,
   Bot,
-  ChevronDown 
+  ChevronDown,
+  Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import CallInterface from "./CallInterface";
 
 const ChatPanel = () => {
   const [message, setMessage] = useState("The advantages of Artificial Intelligence");
+  const [isInCall, setIsInCall] = useState(false);
+  const [currentModel, setCurrentModel] = useState("GPT-3.5");
+
+  const handleStartCall = () => {
+    // Check current model and start call
+    console.log(`Starting call with model: ${currentModel}`);
+    setIsInCall(true);
+  };
+
+  const handleEndCall = () => {
+    setIsInCall(false);
+  };
+
+  if (isInCall) {
+    return <CallInterface onEndCall={handleEndCall} currentModel={currentModel} />;
+  }
 
   return (
     <div className="flex-1 flex flex-col h-screen">
@@ -115,6 +133,10 @@ const ChatPanel = () => {
             <Button variant="outline" size="sm">
               <RotateCcw className="w-4 h-4 mr-2" />
               Regenerate response
+            </Button>
+            <Button variant="gradient" size="sm" onClick={handleStartCall}>
+              <Phone className="w-4 h-4 mr-2" />
+              Start a call
             </Button>
           </div>
 
